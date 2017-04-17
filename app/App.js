@@ -12,8 +12,9 @@ import {
   View
 } from 'react-native';
 
-import {Scene, Router} from 'react-native-router-flux';
+import {Scene, Router, ActionConst} from 'react-native-router-flux';
 
+import splashScreen from './components/splashScreen';
 import List from './components/list';
 import Detail from './components/detail';
 
@@ -22,7 +23,8 @@ export default class askGaryVee extends Component {
     return (
       <Router>
         <Scene key="root" hideNavBar>
-          <Scene key="list" component={List} title='List' initial={true} />
+          <Scene key="splashScreen" component={splashScreen} title="SplashScreen" initial={true} type={ActionConst.REPLACE} />
+          <Scene key="list" component={List} title='List'/>
           <Scene key="detail" component={Detail} title='Detail' />
         </Scene>
       </Router>

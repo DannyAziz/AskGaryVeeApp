@@ -9,12 +9,12 @@
   "dependencies": {
     "algoliasearch": "^3.22.1",
     "algoliasearch-helper": "^2.20.1",
+    "lottie-react-native": "^1.1.1",
     "native-base": "^2.0.13",
     "react": "~15.4.1",
     "react-native": "0.42.3",
     "react-native-infinite-scroll-view": "^0.4.2",
-    "react-native-router-flux": "^3.38.0",
-    "react-native-youtube": "^0.8.1"
+    "react-native-router-flux": "^3.38.0"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
@@ -24,5 +24,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/"
+    ]
   }
 }

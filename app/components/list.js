@@ -8,12 +8,11 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
   View,
   ListView
 } from 'react-native';
 
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Card, CardItem, Item, Input, Separator } from 'native-base';
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Card, CardItem, Item, Input, Separator, Text, Spinner } from 'native-base';
 
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 
@@ -94,7 +93,7 @@ export default class List extends Component {
     return (
       <Container>
           {this.state.searchBarOpen &&
-            <Header searchBar rounded>
+            <Header style={{backgroundColor: '#c21707'}} searchBar rounded>
               <Item>
                   <Icon name="search" />
                   <Input placeholder="Search"
@@ -103,27 +102,28 @@ export default class List extends Component {
                    clearButtonMode='always'
                    returnKeyType='done'
                    />
+                   <Icon onPress={() => this.cancelSearch()} name="md-close" />
               </Item>
-              <Button onPress={() => this.cancelSearch()} transparent>
-                  <Text>Cancel</Text>
-              </Button>
             </Header>
           }
           {!this.state.searchBarOpen &&
-            <Header>
+            <Header style={{backgroundColor: '#c21707'}} >
               <Left>
               </Left>
               <Body>
+                <Title style={{fontFamily: 'Knockout50A', fontSize: 24, color: 'white'}}>
+                  ASKGARYVEE
+                </Title>
               </Body>
               <Right>
                 <Button onPress={() => this.setState({searchBarOpen: true})} transparent>
-                    <Text>Search</Text>
+                    <Text style={{color: 'white'}}>Search</Text>
                 </Button>
               </Right>
             </Header>
           }
           {this.state.loading &&
-            <Text>Loading cuz</Text>
+            <Spinner color='#c21707'/>
           }
           {!this.state.loading &&
             <ListView
