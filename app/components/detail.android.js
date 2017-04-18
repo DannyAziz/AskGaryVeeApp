@@ -59,7 +59,7 @@ export default class Detail extends Component {
             <Icon style={{color: 'white'}} name='md-arrow-back' onPress={() => Actions.pop()}/>
           </Left>
           <Body style={{flex: 3}}>
-            <Title style={{color: 'white'}>{this.state.question.episodeInteger} - {this.state.question.question}</Title>
+            <Title style={{color: 'white'}}>{this.state.question.episodeInteger} - {this.state.question.question}</Title>
           </Body>
           <Right>
           </Right>

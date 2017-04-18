@@ -9,7 +9,9 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  ListView
+  ListView,
+  NetInfo,
+  Alert
 } from 'react-native';
 
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Card, CardItem, Item, Input, Separator, Text, Spinner } from 'native-base';
@@ -37,26 +39,54 @@ export default class List extends Component {
       dataSource: ds,
       searchText: '',
       searchBarOpen: false,
-      loading: true
+      loading: true,
+      connection: false
     }
   }
 
   componentDidMount() {
+    NetInfo.addEventListener(
+      'change',
+      this.handleConnectionInfoChange
+    );
     this.helper.once('result', (res) => {
       console.log(res)
       this.setState({dataSource: this.state.dataSource.cloneWithRows(res.hits)}, () => {
         this.setState({loading: false});
       })
    });
-   this.helper.search();
  };
+
+ componentWillUnmount() {
+    NetInfo.removeEventListener(
+        'change',
+        this.handleConnectionInfoChange
+    );
+  }
+
+  handleConnectionInfoChange = (reach) => {
+    console.log(reach);
+    if (reach == 'wifi' || reach == 'cell') {
+      console.log('Mans got a connnection ')
+      this.setState({connection: true}, () => {
+        this.helper.search();
+      })
+    } else {
+      console.log('No fucking connection')
+      this.setState({connection: false},() => {
+        this.setState({loading: false});
+      })
+    }
+  }
 
  openQuestion(data) {
    Actions.detail({question: data})
  }
 
  search(text) {
-   this.refs.listView.scrollTo({x: 0, y: 0 ,animated: false});
+   if (this.refs.listView) {
+     this.refs.listView.scrollTo({x: 0, y: 0 ,animated: false});
+   }
    this.setState({searchText: text})
    this.helper.once('result', (res) => {
      this.setState({dataSource: this.state.dataSource.cloneWithRows(res.hits)})
@@ -66,10 +96,11 @@ export default class List extends Component {
  }
 
  nextPage() {
-   this.setState({pageCount: this.state.pageCount + 1}, () => {
-     this.nextPageSearch()
-   });
-
+   if (this.state.connection) {
+     this.setState({pageCount: this.state.pageCount + 1}, () => {
+       this.nextPageSearch()
+     });
+   }
  }
 
  nextPageSearch() {
@@ -94,13 +125,14 @@ export default class List extends Component {
       <Container>
           {this.state.searchBarOpen &&
             <Header style={{backgroundColor: '#c21707'}} searchBar rounded>
-              <Item>
+              <Item style={{ backgroundColor: 'white' }}>
                   <Icon name="search" />
                   <Input placeholder="Search"
                    onChangeText={(text) => this.search(text)}
                    value={this.state.searchText}
                    clearButtonMode='always'
                    returnKeyType='done'
+                   clearButtonMode='never'
                    />
                    <Icon onPress={() => this.cancelSearch()} name="md-close" />
               </Item>
@@ -110,22 +142,24 @@ export default class List extends Component {
             <Header style={{backgroundColor: '#c21707'}} >
               <Left>
               </Left>
-              <Body>
+              <Body style={{ flex: 3 }}>
                 <Title style={{fontFamily: 'Knockout50A', fontSize: 24, color: 'white'}}>
                   ASKGARYVEE
                 </Title>
               </Body>
               <Right>
-                <Button onPress={() => this.setState({searchBarOpen: true})} transparent>
-                    <Text style={{color: 'white'}}>Search</Text>
-                </Button>
+                {this.state.connection && !this.state.loading &&
+                  <Button onPress={() => this.setState({searchBarOpen: true})} transparent>
+                      <Icon style={{ color:'white' }} name="search" />
+                  </Button>
+                }
               </Right>
             </Header>
           }
           {this.state.loading &&
             <Spinner color='#c21707'/>
           }
-          {!this.state.loading &&
+          {!this.state.loading && this.state.connection &&
             <ListView
             ref='listView'
             dataSource={this.state.dataSource}
@@ -141,7 +175,23 @@ export default class List extends Component {
                  </CardItem>
                </Card>}
             onEndReached={() => this.nextPage()}
+            renderFooter={() =>
+              <Spinner color='#c21707'/>
+            }
             />
+          }
+          {!this.state.loading && !this.state.connection &&
+            <Content>
+              <Card>
+                <CardItem>
+                  <Body>
+                    <Text>
+                      You have no internet connection!
+                    </Text>
+                  </Body>
+                </CardItem>
+              </Card>
+            </Content>
           }
 
 

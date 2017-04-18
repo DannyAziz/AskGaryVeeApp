@@ -23,7 +23,7 @@ export default class askGaryVee extends Component {
     return (
       <Router>
         <Scene key="root" hideNavBar>
-          <Scene key="splashScreen" component={splashScreen} title="SplashScreen" initial={true} type={ActionConst.REPLACE} />
+          <Scene key="splashScreen" component={splashScreen} title="SplashScreen" initial={true} />
           <Scene key="list" component={List} title='List'/>
           <Scene key="detail" component={Detail} title='Detail' />
         </Scene>

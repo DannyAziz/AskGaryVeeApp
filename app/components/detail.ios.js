@@ -54,9 +54,11 @@ export default class Detail extends Component {
   render() {
     return (
       <Container scrollEnabled={false}>
-        <Header style={{backgroundColor: '#c21707'}}>
+        <Header style={{backgroundColor: '#c21707', borderBottomWidth: 0}}>
           <Left>
-            <Icon style={{color: 'white'}} name='ios-arrow-back' onPress={() => Actions.pop()}/>
+            <Button transparent onPress={() => Actions.pop()}>
+              <Icon style={{color: 'white'}} name='ios-arrow-back' />
+            </Button>
           </Left>
           <Body style={{flex: 3}}>
             <Title style={{color: 'white'}}>{this.state.question.episodeInteger} - {this.state.question.question}</Title>

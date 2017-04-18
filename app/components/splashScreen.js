@@ -12,7 +12,7 @@ import {
 
 import Animation from 'lottie-react-native';
 
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 
 
 export default class splashScreen extends Component {
@@ -24,13 +24,14 @@ export default class splashScreen extends Component {
   }
 
   componentDidMount() {
+    console.log(this)
     Animated.timing(this.state.progress, {
       toValue: 1,
         duration: 5000,
         useNativeDriver: true,
       }).start(() => {
         setTimeout(() => {
-          Actions.list();
+          Actions.list({type: ActionConst.REPLACE})
         }, 500)
       });
     }
@@ -39,6 +40,7 @@ export default class splashScreen extends Component {
     render() {
       return(
         <Animation
+        ref='lottie'
         style={{
           width: Dimensions.get('window').width,
           height: Dimensions.get('window').height,
